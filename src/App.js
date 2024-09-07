@@ -1,24 +1,25 @@
-import logo from './logo.svg';
+import UserDashboard from './components/UserDashboard/UserDashboard';
+import SearchBar from './components/SearchBar/SearchBar';
+import ResultsList from './components/ResultsList/ResultsList';
+import MapDisplay from './components/MapDisplay/MapDisplay';
+import { TransportProvider } from './components/Service/TransportContext';
+import TransportContext from './components/Service/TransportContext';
 import './App.css';
+import React from 'react';
+
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+       {/* <UserDashboard /> */}
+       <TransportProvider>
+       <SearchBar />
+       </TransportProvider>
+
     </div>
+
   );
 }
 
