@@ -13,10 +13,10 @@ import React from 'react';
 function App() {
   return (
     <div className='App'>
-       {/* <UserDashboard /> */}
-       <TransportProvider>
-       <SearchBar />
-       </TransportProvider>
+      {/* <UserDashboard /> */}
+      <TransportProvider>
+        <SearchBar />
+      </TransportProvider>
 
     </div>
 

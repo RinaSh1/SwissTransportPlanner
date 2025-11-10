@@ -19,6 +19,7 @@
 import React from 'react';
 import './ResultsList.css';
 
+
 function ResultsList({ connections }) {
   return (
     <div className="results-list">
