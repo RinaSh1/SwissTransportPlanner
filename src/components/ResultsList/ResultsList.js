@@ -16,21 +16,42 @@
 // }
 
 // export default ResultsList;
-import React from 'react';
-import './ResultsList.css';
-
+import React from "react";
 
 function ResultsList({ connections }) {
   return (
-    <div className="results-list">
-      <ul>
-        {connections.map((connection, index) => (
-          <li key={index}>
-            <p><strong>From:</strong> {connection.from.station.name} <strong>To:</strong> {connection.to.station.name} <strong>Departure:</strong> {new Date(connection.from.departure).toLocaleString()}<strong>Arrival:</strong> {new Date(connection.to.arrival).toLocaleString()}</p>
+    <ul className="results-list">
+      {connections.map((c, index) => {
+        const from = c.from.station.name;
+        const to = c.to.station.name;
+
+        const dep = new Date(c.from.departure);
+        const arr = new Date(c.to.arrival);
+
+        return (
+          <li className="result-item" key={index}>
+            <div className="result-top">
+              <div className="route">
+                <span className="route-strong">{from}</span>
+                <span className="route-arrow">→</span>
+                <span className="route-strong">{to}</span>
+              </div>
+            </div>
+
+            <div className="result-meta">
+              <div className="meta">
+                <span className="meta-label">Departure</span>
+                <span className="meta-value">{dep.toLocaleString()}</span>
+              </div>
+              <div className="meta">
+                <span className="meta-label">Arrival</span>
+                <span className="meta-value">{arr.toLocaleString()}</span>
+              </div>
+            </div>
           </li>
-        ))}
-      </ul>
-    </div>
+        );
+      })}
+    </ul>
   );
 }
 

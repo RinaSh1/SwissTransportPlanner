@@ -1,59 +1,70 @@
-
-import React, { useContext } from 'react';
-import { TransportContext } from '../Service/TransportContext'; // Import the context
-import './SearchBar.css';
-import ResultsList from '../ResultsList/ResultsList';
-
+import React, { useContext } from "react";
+import { TransportContext } from "../Service/TransportContext";
+import ResultsList from "../ResultsList/ResultsList";
 
 function SearchBar() {
-  const { setFrom, setTo, setDate, setTime, fetchConnections, connections, loading, error } = useContext(TransportContext); // Use context
+  const { setFrom, setTo, setDate, setTime, fetchConnections, connections, loading, error } =
+    useContext(TransportContext);
 
-  const handleSearch = () => {
-    // Call the fetchConnections method from the context to fetch data from the API
-    fetchConnections();
-  };
+  const handleSearch = () => fetchConnections();
 
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        onChange={(e) => setFrom(e.target.value)} // Directly setting the context state
-        placeholder="From"
-        className="input-field"
-      />
-      <input
-        type="text"
-        onChange={(e) => setTo(e.target.value)} // Directly setting the context state
-        placeholder="To"
-        className="input-field"
-      />
-      <input
-        type="date"
-        onChange={(e) => setDate(e.target.value)} // Directly setting the context state
-        className="input-field"
-      />
-      <input
-        type="time"
-        onChange={(e) => setTime(e.target.value)} // Directly setting the context state
-        className="input-field"
-      />
-      <button className="search-button" onClick={handleSearch}>
-        Search
+    <div className="form">
+      <div className="field">
+        <label className="label">From</label>
+        <input
+          type="text"
+          onChange={(e) => setFrom(e.target.value)}
+          placeholder="e.g., Visp"
+          className="input"
+        />
+      </div>
+
+      <div className="field">
+        <label className="label">To</label>
+        <input
+          type="text"
+          onChange={(e) => setTo(e.target.value)}
+          placeholder="e.g., Zürich HB"
+          className="input"
+        />
+      </div>
+
+      <div className="row">
+        <div className="field">
+          <label className="label">Date</label>
+          <input type="date" onChange={(e) => setDate(e.target.value)} className="input" />
+        </div>
+
+        <div className="field">
+          <label className="label">Time</label>
+          <input type="time" onChange={(e) => setTime(e.target.value)} className="input" />
+        </div>
+      </div>
+
+      <button className="button" onClick={handleSearch} disabled={loading}>
+        {loading ? "Searching..." : "Search"}
       </button>
 
-      {/* Display loading state */}
-      {loading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
 
-      {/* Display error message */}
-      {error && <p>{error}</p>}
+      {/* Put results visually under the Results card: we’ll render them with a wrapper class */}
+      {connections.length > 0 && (
+        <div className="results">
+          <ResultsList connections={connections} />
+        </div>
+      )}
 
-      {/* Display results only if the connections array is not empty */}
-      {connections.length > 0 && <ResultsList connections={connections} />}
+      {/* empty state */}
+      {!loading && !error && connections.length === 0 && (
+        <p className="hint">Tip: Use station names like “Visp” and “Zürich HB”.</p>
+      )}
     </div>
   );
 }
 
 export default SearchBar;
+
 // import React, { useState, useEffect, useContext } from 'react';
 // import { TransportContext } from '../Service/TransportContext'; // Import the context
 // import './SearchBar.css';
