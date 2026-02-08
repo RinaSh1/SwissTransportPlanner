@@ -1,57 +1,75 @@
-// import React from 'react';
-// import './ResultsList.css';
-
-
-// function ResultsList({from, to, date, time, }) {
-//   return (
-//     <div className="results-list">
-//       <ul>
-//         <li>Searching from: {from} to {to} On date: {date} at time: {time}</li>
-//         <li>Searching from: {from} to {to} On date: {date} at time: {time}</li>
-//         <li>Searching from: {from} to {to} On date: {date} at time: {time}</li>
-
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default ResultsList;
 import React from "react";
+import ConnectionDetails from "../ConnectionDetails/ConnectionDetails";
 
-function ResultsList({ connections }) {
+function ResultsList({ connections, selected, onSelect }) {
+  function formatDateTime(isoString) {
+    const date = new Date(isoString);
+
+    const time = date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const day = date.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    return { time, day };
+  }
+
   return (
-    <ul className="results-list">
-      {connections.map((c, index) => {
-        const from = c.from.station.name;
-        const to = c.to.station.name;
+    <div>
+      <ul className="results-list compact">
+        {connections.map((c, index) => {
+          const from = c.from.station.name;
+          const to = c.to.station.name;
 
-        const dep = new Date(c.from.departure);
-        const arr = new Date(c.to.arrival);
+          const dep = formatDateTime(c.from.departure);
+          const arr = formatDateTime(c.to.arrival);
 
-        return (
-          <li className="result-item" key={index}>
-            <div className="result-top">
-              <div className="route">
-                <span className="route-strong">{from}</span>
-                <span className="route-arrow">→</span>
-                <span className="route-strong">{to}</span>
-              </div>
-            </div>
+          const isSelected = selected === c;
+          const transfers = c.transfers ?? 0;
 
-            <div className="result-meta">
-              <div className="meta">
-                <span className="meta-label">Departure</span>
-                <span className="meta-value">{dep.toLocaleString()}</span>
+          return (
+            <li
+              key={index}
+              className={`connRow ${isSelected ? "connRow--selected" : ""}`}
+              onClick={() => onSelect(c)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="connRow__times">
+                <span className="connRow__time">{dep.time}</span>
+                <span className="connRow__dash">—</span>
+                <span className="connRow__time">{arr.time}</span>
               </div>
-              <div className="meta">
-                <span className="meta-label">Arrival</span>
-                <span className="meta-value">{arr.toLocaleString()}</span>
+
+              <div className="connRow__route">
+                <span className="connRow__station">{from}</span>
+                <span className="connRow__arrow">→</span>
+                <span className="connRow__station">{to}</span>
               </div>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+
+              <div className="connRow__meta">
+                <span className="pill">
+                  {transfers === 0
+                    ? "Direct"
+                    : `${transfers} change${transfers > 1 ? "s" : ""}`}
+                </span>
+              </div>
+
+              <div className="connRow__chev">›</div>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Details appear below the list */}
+      {selected && <ConnectionDetails connection={selected} />}
+    </div>
   );
 }
 
